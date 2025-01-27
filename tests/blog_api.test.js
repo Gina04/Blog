@@ -1,10 +1,13 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const assert = require('assert');
 const api = supertest(app)
 const Blog = require('../models/blog');
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
+const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({}); // Limpia la base de datos de prueba antes de cada test
@@ -95,7 +98,7 @@ test('blog without likes defaults to 0 likes', async () =>{
 
 })
 
-test.only('blog identifier is named id instead of _id', async()=>{
+test('blog identifier is named id instead of _id', async()=>{
   const response = await api.get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -130,7 +133,48 @@ test('blogs are returned as json', async () => {
     assert(contents.includes('Ciberseguridad Google'))
   })
 
-  console.log('CURRENTEEEE NODE_ENV:', process.env.NODE_ENV);
+  describe.only('When there is initially one user in bd', ()=>{
+    beforeEach(async ()=>{
+      await User.deleteMany({})
+
+      const passWordHash = await bcrypt.hash('sekret', 10)
+      const user = new User({username: 'root', passWordHash})
+
+        await user.save()
+      
+    })
+
+    test('Creation succesds with a fresh username', async ()=>{
+      const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+    expect(response.status).toBe(201);
+
+    const usernames = usersAtEnd.map(u => u.username)
+    assert(usernames.includes(newUser.username))
+  })
+    
+
+  })
+
+
+
+
+
 
 after(async () => {
     await mongoose.connection.close()
