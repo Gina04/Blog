@@ -1,0 +1,76 @@
+TODO 
+Parte 2
+......
+
+Parte 3
+.......
+
+Parte 4
+4.23*
+
+Registrar Usuario y Loguearse
+>npm run dev
+POSTMAN
+Post:http://localhost:3001/api/users
+
+username: giiina
+password: giiina
+
+Post:http://localhost:3001/api/login
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdpaWluYSI
+sImlkIjoiNjc5OTUyZTRiMmUyNDUxZjQ3ZDIyMjdiIiwiaWF0IjoxNzM4MTAxNTk3fQ.6WwkDa6yT-
+_E-fs-oYsdv81Xdi0X5XhzQWDt8aYpjSQ",
+    "username": "giiina"
+}
+
+YO CREAR UN BLOG 
+http://localhost:3001/api/blogs
+Body:
+{
+  "title": "Registrar Usuario y Loguearse",
+  "author": "Ginita",
+  "url": "http://example.com/registrar-usuario-loguearse",
+  "likes": 0
+}
+ Status 201 Created
+
+ {
+    "title": "Registrar Usuario y Loguearse",
+    "author": "Anonymous",
+    "url": "http://example.com/registrar-usuario-loguearse",
+    "likes": 0,
+    "user": "679952e4b2e2451f47d2227b",
+    "id": "679954e6b2e2451f47d22281"
+}
+
+HEADER
+Authorization Bearer <token>
+
+>Borrar un blog de un usuario autenticado 
+
+Con esta configuración, ahora solo el usuario que creó un blog podrá eliminarlo. 
+Si intentas eliminar un blog sin el token o con un token de otro usuario, recibirás 
+el error correspondiente
+
+http://localhost:3001/api/blogs/679954e6b2e2451f47d22281
+
+Header 
+Authorization Bearer <tokenUsuarioCreoBlog>
+
+
+--------------------------------------------------------------------------
+crear usuario
+{
+    "username": "Alex",
+    "blogs": [],
+    "id": "679add091555dbdde3fcc875"
+}
+
+loguearse 
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsZXgiLCJpZCI6IjY3OWFkZDA5MTU1NWRiZGRlM2ZjYzg3NSIsImlhdCI6MTczODIwMjQ5Mn0.0w-uLyjEJnvcCqWYVpUWVQpJnrahub4xafT6sRsQCC4",
+    "username": "Alex"
+}
